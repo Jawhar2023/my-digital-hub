@@ -1,9 +1,8 @@
 import { motion } from "framer-motion";
-import { Globe, Phone, Mail, Monitor, Video, Megaphone } from "lucide-react";
-import logo from "@/assets/logo.jpeg";
-import ServiceBadge from "@/components/ServiceBadge";
-import ContactCard from "@/components/ContactCard";
-import SocialButton from "@/components/SocialButton";
+import { Phone, Mail, Globe, Monitor, Video, Megaphone } from "lucide-react";
+import BackgroundEffects from "@/components/BackgroundEffects";
+import ParallaxLogo from "@/components/ParallaxLogo";
+import TypingText from "@/components/TypingText";
 
 const FacebookIcon = () => (
   <svg viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5">
@@ -17,128 +16,185 @@ const InstagramIcon = () => (
   </svg>
 );
 
+const spring = { type: "spring" as const, stiffness: 300, damping: 24 };
+const stagger = 0.08;
+
+const services = [
+  { icon: Monitor, label: "Website Creation", emoji: "🌐" },
+  { icon: Video, label: "Video Editing", emoji: "🎬" },
+  { icon: Megaphone, label: "Meta Ads", emoji: "📣" },
+];
+
+const contacts = [
+  { icon: Phone, label: "Mobile Phone", value: "+216 50577392 / 53859899", href: "tel:+21650577392" },
+  { icon: Mail, label: "Email", value: "it2lab.tn@gmail.com", href: "mailto:it2lab.tn@gmail.com" },
+  { icon: Globe, label: "Website", value: "https://it2lab.com/", href: "https://it2lab-tn.vercel.app/" },
+];
+
+const socials = [
+  { icon: <FacebookIcon />, href: "https://www.facebook.com/profile.php?id=61587631085784", label: "Facebook" },
+  { icon: <InstagramIcon />, href: "https://www.instagram.com/it2lab.tn/?hl=fr", label: "Instagram" },
+  { icon: <Globe className="h-5 w-5" />, href: "https://it2lab-tn.vercel.app/", label: "Website" },
+];
+
 const Index = () => {
   return (
-    <div className="flex min-h-screen items-start justify-center bg-background px-4 py-8">
-      <div className="w-full max-w-sm">
-        {/* Header gradient bar */}
-        <motion.div
-          initial={{ scaleX: 0 }}
-          animate={{ scaleX: 1 }}
-          transition={{ duration: 0.6 }}
-          className="mx-auto h-1.5 w-32 rounded-full"
-          style={{ background: "var(--gradient-brand)" }}
-        />
+    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-background px-4 py-6">
+      <BackgroundEffects />
 
-        {/* Logo */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2, duration: 0.5 }}
-          className="mt-8 flex flex-col items-center"
+      {/* Phone mockup */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.9, y: 40 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={{ duration: 0.7, ease: [0.23, 1, 0.32, 1] }}
+        className="relative z-10 w-full max-w-[380px]"
+      >
+        {/* Phone frame */}
+        <div
+          className="relative rounded-[40px] p-[3px]"
+          style={{
+            background: "linear-gradient(145deg, hsl(210 40% 92% / 0.15), hsl(210 40% 92% / 0.03))",
+          }}
         >
-          <div className="h-20 w-20 overflow-hidden rounded-2xl shadow-lg">
-            <img src={logo} alt="IT2LAB Logo" className="h-full w-full object-cover" />
+          <div className="rounded-[38px] bg-background p-1">
+            {/* Dynamic island */}
+            <div className="mx-auto mt-2 h-[28px] w-[100px] rounded-full bg-foreground/90" />
+
+            {/* Inner glass card */}
+            <div className="glass-card mt-4 mx-2 mb-2 rounded-3xl p-5 overflow-hidden">
+              {/* Logo section */}
+              <motion.div
+                initial={{ opacity: 0, y: -30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3, ...spring }}
+                className="flex flex-col items-center"
+              >
+                <ParallaxLogo />
+
+                <h1 className="mt-5 font-display text-2xl font-extrabold tracking-[3px]">
+                  <TypingText text="IT2LAB" className="holo-text" />
+                </h1>
+
+                <motion.p
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 1.2, duration: 0.8 }}
+                  className="mt-3 text-center text-xs leading-relaxed text-muted-foreground italic"
+                >
+                  Want more customers online? We create beautiful websites, engaging videos, and smart ads that make your business stand out.
+                </motion.p>
+              </motion.div>
+
+              {/* Services */}
+              <div className="mt-5 flex flex-wrap justify-center gap-2">
+                {services.map((s, i) => (
+                  <motion.div
+                    key={s.label}
+                    initial={{ opacity: 0, scale: 0.5, rotate: -10 }}
+                    animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                    transition={{ delay: 1.4 + i * stagger, ...spring }}
+                    whileHover={{ scale: 1.08, boxShadow: "var(--glow-cyan)" }}
+                    className="press-feedback flex items-center gap-1.5 rounded-full border border-border bg-muted/40 px-3 py-1.5 text-xs font-medium text-foreground cursor-default backdrop-blur-sm"
+                  >
+                    <span>{s.emoji}</span>
+                    {s.label}
+                  </motion.div>
+                ))}
+              </div>
+
+              {/* CTA Button */}
+              <motion.a
+                href="tel:+21650577392"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 1.8, ...spring }}
+                className="liquid-btn press-feedback mt-6 flex w-full items-center justify-center gap-2 rounded-2xl border border-primary/30 py-3.5 text-xs font-bold uppercase tracking-[3px] text-primary transition-colors hover:text-primary-foreground"
+                style={{ boxShadow: "var(--glow-cyan)" }}
+              >
+                <Phone className="h-4 w-4" />
+                + Add Contact
+              </motion.a>
+
+              {/* Quick actions */}
+              <div className="mt-4 flex justify-center gap-3">
+                <motion.a
+                  href="tel:+21650577392"
+                  initial={{ opacity: 0, scale: 0 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 2.0, ...spring }}
+                  whileHover={{ scale: 1.15 }}
+                  className="press-feedback flex h-11 w-11 items-center justify-center rounded-full border border-primary/20 bg-primary/10 text-primary"
+                  aria-label="Call"
+                >
+                  <Phone className="h-4 w-4" />
+                </motion.a>
+                <motion.a
+                  href="mailto:it2lab.tn@gmail.com"
+                  initial={{ opacity: 0, scale: 0 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 2.1, ...spring }}
+                  whileHover={{ scale: 1.15 }}
+                  className="press-feedback flex h-11 w-11 items-center justify-center rounded-full border border-secondary/20 bg-secondary/10 text-secondary"
+                  aria-label="Email"
+                >
+                  <Mail className="h-4 w-4" />
+                </motion.a>
+              </div>
+
+              {/* Contact cards */}
+              <div className="mt-6 flex flex-col gap-2.5">
+                {contacts.map((c, i) => (
+                  <motion.a
+                    key={c.label}
+                    href={c.href}
+                    target={c.href.startsWith("http") ? "_blank" : undefined}
+                    rel={c.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                    initial={{ opacity: 0, x: -40 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 2.2 + i * stagger, ...spring }}
+                    className="neon-border-left press-feedback glass-card flex items-center gap-3 rounded-xl p-3 transition-all hover:border-primary/20"
+                    style={{ animationDelay: `${2.2 + i * 0.15}s` }}
+                  >
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10">
+                      <c.icon className="h-4 w-4 text-primary" />
+                    </div>
+                    <div className="min-w-0">
+                      <p className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">
+                        {c.label}
+                      </p>
+                      <p className="truncate font-mono text-xs font-medium text-foreground">{c.value}</p>
+                    </div>
+                  </motion.a>
+                ))}
+              </div>
+
+              {/* Social icons */}
+              <div className="mt-6 flex justify-center gap-3 pb-2">
+                {socials.map((s, i) => (
+                  <motion.a
+                    key={s.label}
+                    href={s.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={s.label}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 2.6 + i * stagger, ...spring }}
+                    whileHover={{
+                      scale: 1.2,
+                      boxShadow: "var(--glow-cyan)",
+                    }}
+                    whileTap={{ scale: 0.9 }}
+                    className="press-feedback flex h-11 w-11 items-center justify-center rounded-xl border border-border bg-muted/50 text-foreground backdrop-blur-sm transition-colors hover:text-primary hover:border-primary/30"
+                  >
+                    {s.icon}
+                  </motion.a>
+                ))}
+              </div>
+            </div>
           </div>
-          <h1 className="mt-4 font-display text-2xl font-bold tracking-tight text-foreground">
-            IT2LAB
-          </h1>
-          <p className="mt-2 text-center text-sm leading-relaxed text-muted-foreground">
-            Want more customers online? We create beautiful websites, engaging videos, and smart ads that make your business stand out.
-          </p>
-        </motion.div>
-
-        {/* Service Badges */}
-        <div className="mt-6 flex flex-wrap justify-center gap-2">
-          <ServiceBadge icon={Monitor} label="Website Creation" delay={0.4} />
-          <ServiceBadge icon={Video} label="Video Editing" delay={0.5} />
-          <ServiceBadge icon={Megaphone} label="Meta Ads" delay={0.6} />
         </div>
-
-        {/* Add Contact Button */}
-        <motion.a
-          href="tel:+21650577392"
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.7, duration: 0.4 }}
-          className="mt-8 flex w-full items-center justify-center gap-2 rounded-2xl py-4 text-sm font-bold uppercase tracking-widest text-primary-foreground transition-transform hover:scale-[1.02] active:scale-[0.98]"
-          style={{ background: "var(--gradient-brand)", boxShadow: "var(--shadow-button)" }}
-        >
-          <Phone className="h-4 w-4" />
-          + Add Contact
-        </motion.a>
-
-        {/* Quick Actions */}
-        <div className="mt-4 flex justify-center gap-3">
-          <motion.a
-            href="tel:+21650577392"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.8 }}
-            className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary transition-colors hover:bg-primary/20"
-            aria-label="Call"
-          >
-            <Phone className="h-5 w-5" />
-          </motion.a>
-          <motion.a
-            href="mailto:it2lab.tn@gmail.com"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.9 }}
-            className="flex h-12 w-12 items-center justify-center rounded-full bg-secondary/10 text-secondary transition-colors hover:bg-secondary/20"
-            aria-label="Email"
-          >
-            <Mail className="h-5 w-5" />
-          </motion.a>
-        </div>
-
-        {/* Contact Cards */}
-        <div className="mt-8 flex flex-col gap-3">
-          <ContactCard
-            icon={Phone}
-            label="Mobile Phone"
-            value="+216 50577392 / 53859899"
-            href="tel:+21650577392"
-            delay={1.0}
-          />
-          <ContactCard
-            icon={Mail}
-            label="Email"
-            value="it2lab.tn@gmail.com"
-            href="mailto:it2lab.tn@gmail.com"
-            delay={1.1}
-          />
-          <ContactCard
-            icon={Globe}
-            label="Website"
-            value="https://it2lab.com/"
-            href="https://it2lab-tn.vercel.app/"
-            delay={1.2}
-          />
-        </div>
-
-        {/* Social Links */}
-        <div className="mt-8 flex justify-center gap-4 pb-8">
-          <SocialButton
-            href="https://www.facebook.com/profile.php?id=61587631085784"
-            icon={<FacebookIcon />}
-            label="Facebook"
-            delay={1.3}
-          />
-          <SocialButton
-            href="https://www.instagram.com/it2lab.tn/?hl=fr"
-            icon={<InstagramIcon />}
-            label="Instagram"
-            delay={1.4}
-          />
-          <SocialButton
-            href="https://it2lab-tn.vercel.app/"
-            icon={<Globe className="h-5 w-5" />}
-            label="Website"
-            delay={1.5}
-          />
-        </div>
-      </div>
+      </motion.div>
     </div>
   );
 };
